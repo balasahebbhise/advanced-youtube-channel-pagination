@@ -1,0 +1,50 @@
+/*------------------------------------------------------------*/
+/*
+=== Advanced Youtube Channel Pagination ===
+Plugin Name: Advanced Youtube Channel Pagination
+Contributors: (https://profiles.wordpress.org/balasahebbhise)
+Author: Mr. Balasaheb Bhise
+Tags: Youtube, Youtube Channel Pagination, Youtube Videos Pagination, Youtube Channel, Youtube Videos, Pagination, Youtube Videos pagination, gallery,Advanced Youtube Channel Pagination, Youtube API 3.
+Requires at least: 4.1
+Tested up to: 4.6
+Stable tag: 4.6
+License: GPLv2 or later
+License URI: https://github.com/balasahebbhise/advanced-youtube-channel-pagination
+Description:The plugin is usefull for showing youtube channel videos with pagination.
+
+Copyright 2016 Balasaheb Bhise  (email : balasahebbhise1@gmail.com)
+
+*/
+/*------------------------------------------------------------*/
+#youtube-channel-pagination{
+    position: relative;
+    width: 100%;
+}
+
+#youtube-channel-pagination #yc-pagination-watch .title{
+    min-height: 40px;
+    max-height: 40px;
+    overflow: hidden;
+    padding-top: 10px;
+}
+
+#youtube-channel-pagination #yc-pagination-watch .ycv-simple-thumb-wrap{
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+#youtube-channel-pagination #yc-pagination-watch .title{
+    cursor: pointer;
+}
+
+#youtube-channel-pagination .display-watch-video iframe{
+    background-color: black;
+}
+
+#youtube-channel-pagination .prev-next-outer{
+    position: relative;
+    padding-bottom: 100px;
+    padding-top: 40px;
+    width: 100%;    
+
+}
