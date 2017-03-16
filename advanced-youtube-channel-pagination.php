@@ -1,18 +1,18 @@
-<?php
+<?php 
+@ob_start();
+error_reporting(0);
+ini_set('display_errors', 0);
 /*
-=== Advanced Youtube Channel Pagination ===
-Plugin Name: Advanced Youtube Channel Pagination
-Contributors: (https://profiles.wordpress.org/balasahebbhise)
-Author: Mr. Balasaheb Bhise
-Tags: Youtube, Youtube Channel Pagination, Youtube Videos Pagination, Youtube Channel, Youtube Videos, Pagination, Youtube Videos pagination, gallery,Advanced Youtube Channel Pagination, Youtube API 3.
-Requires at least: 4.1
-Tested up to: 4.6
-Stable tag: 4.6
-License: GPLv2 or later
-License URI: https://github.com/balasahebbhise/advanced-youtube-channel-pagination
-Description:The plugin is usefull for showing youtube channel videos with pagination.
-
-Copyright 2016 Balasaheb Bhise  (email : balasahebbhise1@gmail.com)
+  === Advanced Youtube Channel Pagination ===
+  Plugin Name: Advanced Youtube Channel Pagination
+  Contributors: Balasaheb Bhise
+  Version: 1.0
+  Tags: Youtube, Youtube Channel Pagination, Youtube Videos Pagination, Youtube Channel, Youtube Videos, Pagination, Youtube Videos pagination, gallery,Advanced Youtube Channel Pagination, Youtube API 3.
+  Requires at least: 4.1
+  Tested up to: 4.7
+  Stable tag: 4.6
+  License: GPLv2 or later
+  Description:This plugin is usefull for showing youtube channel videos with pagination.
  */
 defined('ABSPATH') or die('No script kiddies please!');
 add_action('plugins_loaded', array('AdvancedYoutubeChannelPagination', 'init'));
@@ -37,6 +37,7 @@ class AdvancedYoutubeChannelPagination {
         $youtube_channel_id_field_val = get_option('youtube_channel_id_field_name');
         $youtube_channel_api_key_field_val = get_option('youtube_channel_api_key_field_name');
         $youtube_channel_result_per_page_field_val = get_option('youtube_channel_result_per_page_field_name');
+        $youtube_channel_grid_on_page_field_val = get_option('youtube_channel_grid_on_page_field_name');
 
         $YCOagination = '<div id="youtube-channel-pagination" class="container"><div id="youtube-channel-video" class="row"><div class="display-watch-video"></div></div><div id="yc-pagination-watch" class="row"></div>
           <div class="row">
@@ -45,6 +46,7 @@ class AdvancedYoutubeChannelPagination {
           <input type="hidden" id="youtube_channel_id_field_name" name="youtube_channel_id_field_name" value="' . $youtube_channel_id_field_val . '" />
           <input type="hidden" id="youtube_channel_api_key_field_name" name="youtube_channel_api_key_field_name" value="' . $youtube_channel_api_key_field_val . '" />
           <input type="hidden" id="youtube_channel_result_per_page_field_name" name="youtube_channel_result_per_page_field_name" value="' . $youtube_channel_result_per_page_field_val . '" />
+          <input type="hidden" id="youtube_channel_grid_on_page_field_name" name="youtube_channel_grid_on_page_field_name" value="' . $youtube_channel_grid_on_page_field_val . '" />
           <div class="prev-next-outer">          
           <button type="button" id="pageTokenPrev" value="" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Previous</button>
           <button type="button" id="pageTokenNext" value="" class="btn btn-default pull-right">Next <i class="fa fa-angle-right"></i></button>
@@ -62,7 +64,6 @@ class AdvancedYoutubeChannelPagination {
         wp_enqueue_style('youtube-channel-pagination-channel-styles', plugins_url('/channel-styles.css', __FILE__));
         wp_enqueue_script('jquery');
         wp_enqueue_script('youtube-channel-pagination', plugins_url('/channel-scripts.js', __FILE__), false, false, true);
-
     }
 
 }
@@ -80,11 +81,13 @@ function youtube_channel_pagination_init() {
     $youtube_channel_id_field_name = 'youtube_channel_id_field_name';
     $youtube_channel_api_key_field_name = 'youtube_channel_api_key_field_name';
     $youtube_channel_result_per_page_field_name = 'youtube_channel_result_per_page_field_name';
+    $youtube_channel_grid_on_page_field_name = 'youtube_channel_grid_on_page_field_name';
 
     // Read in existing option value from database
     $youtube_channel_id_field_val = get_option($youtube_channel_id_field_name);
     $youtube_channel_api_key_field_val = get_option($youtube_channel_api_key_field_name);
     $youtube_channel_result_per_page_field_val = get_option($youtube_channel_result_per_page_field_name);
+    $youtube_channel_grid_on_page_field_val = get_option($youtube_channel_grid_on_page_field_name);
 
     // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
@@ -93,11 +96,13 @@ function youtube_channel_pagination_init() {
         $youtube_channel_id_field_val = $_POST[$youtube_channel_id_field_name];
         $youtube_channel_api_key_field_val = $_POST[$youtube_channel_api_key_field_name];
         $youtube_channel_result_per_page_field_val = $_POST[$youtube_channel_result_per_page_field_name];
+        $youtube_channel_grid_on_page_field_val = $_POST[$youtube_channel_grid_on_page_field_name];
 
         // Save the posted value in the database
         update_option($youtube_channel_id_field_name, $youtube_channel_id_field_val);
         update_option($youtube_channel_api_key_field_name, $youtube_channel_api_key_field_val);
         update_option($youtube_channel_result_per_page_field_name, $youtube_channel_result_per_page_field_val);
+        update_option($youtube_channel_grid_on_page_field_name, $youtube_channel_grid_on_page_field_val);
     }
     ?>
     <div class="wrap">
@@ -124,7 +129,15 @@ function youtube_channel_pagination_init() {
                         <th scope="row"><label for="default_role">Results Per Page</label></th>
                         <td>
                             <select name="<?php echo $youtube_channel_result_per_page_field_name ?>" id="default_role">
-                                <option selected="selected" value="<?php if($youtube_channel_result_per_page_field_val!=''){ echo $youtube_channel_result_per_page_field_val; }else{ echo'4';}?>"><?php if($youtube_channel_result_per_page_field_val!=''){ echo $youtube_channel_result_per_page_field_val; }else{ echo'4';}?></option>
+                                <option selected="selected" value="<?php if ($youtube_channel_result_per_page_field_val != '') {
+        echo $youtube_channel_result_per_page_field_val;
+    } else {
+        echo'4';
+    } ?>"><?php if ($youtube_channel_result_per_page_field_val != '') {
+        echo $youtube_channel_result_per_page_field_val;
+    } else {
+        echo'4';
+    } ?></option>
                                 <option value="4">4</option>
                                 <option value="8">8</option>
                                 <option value="12">12</option>
@@ -137,6 +150,27 @@ function youtube_channel_pagination_init() {
                                 <option value="40">40</option>
                                 <option value="44">44</option>
                                 <option value="48">48</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="youtube_channel_grid_on_page">Select Grid</label></th>
+                        <td>
+                            <select name="<?php echo $youtube_channel_grid_on_page_field_name ?>" id="youtube_channel_grid_on_page">
+                                <option selected="selected" value="<?php if ($youtube_channel_grid_on_page_field_val != '') {
+        echo $youtube_channel_grid_on_page_field_val;
+    } else {
+        echo'4';
+    } ?>"><?php if ($youtube_channel_grid_on_page_field_val != '') {
+        echo $youtube_channel_grid_on_page_field_val;
+    } else {
+        echo'4';
+    } ?></option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
                             </select>
                         </td>
                     </tr>

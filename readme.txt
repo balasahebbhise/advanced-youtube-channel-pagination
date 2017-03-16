@@ -1,16 +1,12 @@
 === Advanced Youtube Channel Pagination ===
 Plugin Name: Advanced Youtube Channel Pagination
-Contributors: (https://profiles.wordpress.org/balasahebbhise)
-Author: Mr. Balasaheb Bhise
+Contributors: Balasaheb Bhise
 Tags: Youtube, Youtube Channel Pagination, Youtube Videos Pagination, Youtube Channel, Youtube Videos, Pagination, Youtube Videos pagination, gallery,Advanced Youtube Channel Pagination, Youtube API 3.
 Requires at least: 4.1
-Tested up to: 4.6
+Tested up to: 4.7
 Stable tag: 4.6
 License: GPLv2 or later
-License URI: https://github.com/balasahebbhise/advanced-youtube-channel-pagination
-Description:The plugin is usefull for showing youtube channel videos with pagination.
-
-Copyright 2016 Balasaheb Bhise  (email : balasahebbhise1@gmail.com)
+The plugin is usefull for showing youtube channel all videos embed with custom pagination, Embed responsive videos.
 
 == Description ==
 
@@ -31,3 +27,10 @@ Demo youtube channel:- UCfPLDrpFPVEJBFm0woqur2A
 Demo youtube API Key:- AIzaSyBKANNBOEWuI41YQKRi7f6g3M7WhecXYtk;
 Default per page:- 04;
 Note: Pleas do not use above credential on production this is only for test purpose.
+
+== Screenshots ==
+
+1. This screen shot description corresponds to screenshot-1.png
+2. This screen shot description admin to screenshot-2.png
+3. This screen shot description corresponds to screenshot-3.png
+
